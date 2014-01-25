@@ -1,0 +1,74 @@
+Base Class:
+ 
+package mod.candy;
+ 
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraftforge.common.MinecraftForge;
+import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.Mod.Instance;
+import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.common.registry.LanguageRegistry;
+ 
+@Mod(modid="candyMod", name="Candy Mod", version="0.0.1")
+@NetworkMod(clientSideRequired=true)
+public class Base {
+ 
+        @Instance(value = "GenericModID")
+        public static Base instance;
+       
+        @SidedProxy(clientSide="mod.candy.ClientProxy",
+                        serverSide="mod.candy.ServerProxy")
+        public static ServerProxy proxy;
+       
+        public final Block candyBlock = new CandyBlock(500, Material.cloth)
+                .setHardness(1.5F).setStepSound(Block.soundGlassFootstep)
+                .setUnlocalizedName("candyBlock").setCreativeTab(CreativeTabs.tabBlock);
+       
+        @EventHandler
+        public void preInit(FMLPreInitializationEvent event) {
+               
+        }
+       
+        @EventHandler
+        public void load(FMLInitializationEvent event) {
+                proxy.registerRenderers();
+               
+                GameRegistry.registerBlock(candyBlock, "candyBlock");
+                LanguageRegistry.addName(candyBlock, "§eCandy Block");
+                MinecraftForge.setBlockHarvestLevel(candyBlock, "shovel", 0);  
+               
+        }
+       
+        @EventHandler
+        public void postInit(FMLPostInitializationEvent event) {
+               
+        }
+}
+ 
+------------------------------------------------------------------------------------------
+ 
+Candy Block:
+ 
+package mod.candy;
+ 
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+ 
+public class CandyBlock extends Block {
+ 
+        public CandyBlock(int id, Material material) {
+                super(id, material);
+                setTextureName("Candy:candyBlock");
+        }
+}
